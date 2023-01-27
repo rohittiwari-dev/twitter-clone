@@ -6,7 +6,7 @@ import { MdScheduleSend } from "react-icons/md";
 import { SlLocationPin } from "react-icons/sl";
 
 const styles = {
-	wrapper: `flex flex-row border-b pt-4 px-4 h-auto border-[#38444d]`,
+	wrapper: `flex flex-row border-b pt-4 px-4 h-auto border-[#38444d]/60`,
 	tweetBoxLeft: `mr-4 h-fit`,
 	tweetBoxRight: `flex-1 h-max flex flex-col gap-3 justify-center pt-3`,
 	profileImage: `h-10 w-10 rounded-full overflow-hidden object-fit`,

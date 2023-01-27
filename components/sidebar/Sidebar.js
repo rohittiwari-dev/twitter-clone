@@ -13,8 +13,8 @@ import { TbSend } from "react-icons/tb";
 const styles = {
 	wrapper: `flex items-end lg:items-start flex-col h-screen col-span-2 ml-2`,
 	twitterIconContainer: `text-3xl mr-7 lg:mx-4 my-3`,
-	tweetButton: `text-[1.1rem] w-fit bg-[#1d9bf0] hover:bg-[#1b8cd8] flex items-center justify-center font-bold rounded-3xl p-3 lg:min-w-full mt-[10px] cursor-pointer`,
-	navContainer: `flex-1`,
+	tweetButton: `text-[1.1rem] w-fit bg-[#1d9bf0] hover:bg-[#1b8cd8] flex items-center justify-center font-bold rounded-full lg:rounded-3xl p-3 lg:min-w-full mt-[10px] cursor-pointer`,
+	navContainer: `flex-1 flex flex-col items-center lg:block pr-5 lg:pr-0`,
 	profileButton: `flex w-fit mx-3 gap-3  p-2 items-center mb-3 cursor-pointer hover:bg-[#191919] rounded-full`,
 	profileLeft: `flex items-center justify-center`,
 	profileImage: `h-10 w-10 rounded-full`,

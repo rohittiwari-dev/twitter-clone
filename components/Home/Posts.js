@@ -7,7 +7,7 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { TbBrandGoogleAnalytics } from "react-icons/tb";
 
 const styles = {
-	wrapper: `flex p-3 border-b border-[#38444d]`,
+	wrapper: `flex p-3 border-b border-[#38444d]/60`,
 	profileImage: `rounded-full h-[40px] w-[40px] object-cover`,
 	postMain: `flex-1 px-4`,
 	headerDetails: `flex items-center`,
@@ -15,12 +15,21 @@ const styles = {
 	verified: `text-[0.8rem]`,
 	handleAndTimeAgo: `text-[#8899a6] ml-1`,
 	tweet: `my-2`,
+	tweetmedia: "w-[650] h-[420] rounded-2xl cover object-fit image",
 	image: `rounded-3xl`,
 	footer: `flex justify-between  mt-2 text-[#8899a6]`,
 	footerIcon: `rounded-full p-[0.3rem] text-[1rem]`,
 };
 
-const Posts = ({ displayName, text, timestamp, username, isProfileImageNFT, avatar }) => {
+const Posts = ({
+	displayName,
+	text,
+	timestamp,
+	username,
+	isProfileImageNFT,
+	avatar,
+	tweetmedia,
+}) => {
 	return (
 		<div className={styles.wrapper}>
 			<div>
@@ -47,6 +56,7 @@ const Posts = ({ displayName, text, timestamp, username, isProfileImageNFT, avat
 						</span>
 					</span>
 					<div className={styles.tweet}>{text}</div>
+					{tweetmedia && <img src={tweetmedia} alt="" className={`${styles.tweetmedia}`} />}
 				</div>
 				<div className={styles.footer}>
 					<span className={`${styles.footerIcon} hover:bg-[#1e364a] hover:text-[#1d9bf0]`}>

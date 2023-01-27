@@ -5,6 +5,7 @@ export const tweets = [
 		timestamp: "2023-09-10T12:00:00.000Z",
 		username: "0xF6eb2f6D790b7571751e5803d86De376B248e11d",
 		isProfileImageNFT: false,
+		media: "https://pbs.twimg.com/card_img/1616995157085388802/N9MEM0lR?format=jpg&name=small",
 		avatar:
 			"https://www.freepngimg.com/thumb/facebook/62681-flat-icons-face-computer-design-avatar-icon.png",
 	},
@@ -40,6 +41,7 @@ export const tweets = [
 		timestamp: "2022-07-10T12:21:00.000Z",
 		username: "0xF6eb2f6D790b7571751e5803d86De376B248e11d",
 		isProfileImageNFT: false,
+		media: "https://th.bing.com/th/id/R.5022bc42e21d7b5d3150238047fe54c8?rik=hCU1W%2bYIWxWebw&riu=http%3a%2f%2fwallpaperheart.com%2fwp-content%2fuploads%2f2018%2f04%2fbeautiful-nature-high-definition-wallpaper_beautiful-backgrounds.jpg&ehk=fSV8hpj%2bFjKJoUHMtZS30tQaaWHli4Fp0hmNgySLnWs%3d&risl=&pid=ImgRaw&r=0",
 		avatar:
 			"https://www.freepngimg.com/thumb/facebook/62681-flat-icons-face-computer-design-avatar-icon.png",
 	},

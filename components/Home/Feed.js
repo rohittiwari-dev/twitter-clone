@@ -5,8 +5,8 @@ import Posts from "@/components/Home/Posts";
 import { tweets } from "@/data/staticData";
 
 const styles = {
-	wrapper: `col-span-7 lg:col-span-5 min-w-fit border-r will-change-scroll border-l border-[#38444d] sticky top-0 h-screen min-h-full scroll-smooth scrollbar-hide overflow-y-auto`,
-	headWrapper: `sticky right-0 left-0 bg-black/70 m-0 backdrop-contrast-75 backdrop-brightness-75 border-b border-[#38444d]  top-0 backdrop-blur z-10`,
+	wrapper: `col-span-7 lg:col-span-5 min-w-fit border-r will-change-scroll border-l border-[#38444d]/60 sticky top-0 h-screen min-h-full scroll-smooth scrollbar-hide overflow-y-auto`,
+	headWrapper: `sticky right-0 left-0 bg-black/70 m-0 backdrop-contrast-75 backdrop-brightness-75 border-b border-[#38444d]/60  top-0 backdrop-blur z-10`,
 	header: ` flex justify-between items-center p-3 pl-4`,
 	headerTab: `flex justify-center items-center `,
 	headerButton: `w-full text-center bg-transparent mb-1 hover:bg-[#191919]  p-3`,
@@ -59,6 +59,7 @@ const Feed = () => {
 					text={tweet.text}
 					avatar={tweet.avatar}
 					timestamp={tweet.timestamp}
+					tweetmedia={tweet.media}
 					isProfileImageNFT={tweet.isProfileImageNFT}
 				/>
 			))}

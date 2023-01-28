@@ -8,14 +8,16 @@ import { FaBell, FaHashtag, FaRegListAlt } from "react-icons/fa";
 import { HiMail, HiOutlineMail } from "react-icons/hi";
 import { BsBookmark, BsBookmarkFill, BsPerson, BsPersonFill } from "react-icons/bs";
 import { CgMoreO } from "react-icons/cg";
-import { TbSend } from "react-icons/tb";
+import TbSend from "@/assets/Twitter-Send-Svg.png";
+import Image from "next/image";
+import { signOut, useSession } from "next-auth/react";
 
 const styles = {
-	wrapper: `flex items-end lg:items-start flex-col h-screen col-span-2 ml-2`,
+	wrapper: `items-end lg:items-start flex-col h-screen col-span-2 ml-2 hidden sm:flex`,
 	twitterIconContainer: `text-3xl mr-7 lg:mx-4 my-3`,
 	tweetButton: `text-[1.1rem] w-fit bg-[#1d9bf0] hover:bg-[#1b8cd8] flex items-center justify-center font-bold rounded-full lg:rounded-3xl p-3 lg:min-w-full mt-[10px] cursor-pointer`,
 	navContainer: `flex-1 flex flex-col items-center lg:block pr-5 lg:pr-0`,
-	profileButton: `flex w-fit mx-3 gap-3  p-2 items-center mb-3 cursor-pointer hover:bg-[#191919] rounded-full`,
+	profileButton: `flex w-fit mr-5 lg:mr-0 gap-3  p-2 items-center mb-3 cursor-pointer hover:bg-[#191919] rounded-full`,
 	profileLeft: `flex items-center justify-center`,
 	profileImage: `h-10 w-10 rounded-full`,
 	profileRight: `flex-1 flex justify-between hidden gap-5 lg:flex`,
@@ -27,6 +29,7 @@ const styles = {
 
 const Sidebar = ({ initialSelectedIcon = "Home" }) => {
 	const [selected, setSelected] = useState(initialSelectedIcon);
+	const data = useSession();
 
 	return (
 		<div className={styles.wrapper}>
@@ -87,23 +90,24 @@ const Sidebar = ({ initialSelectedIcon = "Home" }) => {
 
 				<div className={styles.tweetButton}>
 					<span className="inline lg:hidden">
-						<TbSend />
+						<Image src={TbSend} width={30} height={30} alt="" loading="eager" />
 					</span>
 					<span className="hidden lg:inline">Tweet</span>
 				</div>
 			</div>
-			<div className={styles.profileButton}>
+			<div
+				className={styles.profileButton}
+				onClick={() => {
+					signOut("google");
+				}}
+			>
 				<div className={styles.profileLeft}>
-					<img
-						className={styles.profileImage}
-						src="https://cdn.iconscout.com/icon/free/png-512/avatar-370-456322.png"
-						alt={""}
-					/>
+					<img className={styles.profileImage} src={data?.data?.user?.image} alt={""} />
 				</div>
 				<div className={styles.profileRight}>
 					<div className={styles.details}>
-						<div className={styles.name}>Rohit Tiwari</div>
-						<div className={styles.handle}>@rohittiwari</div>
+						<div className={styles.name}>{data?.data?.user?.name}</div>
+						<div className={styles.handle}>@{data?.data?.user?.email?.split("@")[0]}</div>
 					</div>
 
 					<div className={styles.moreContainer}>

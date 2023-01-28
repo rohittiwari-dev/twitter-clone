@@ -1,8 +1,10 @@
 import Widget from "@/components/Home/Widget";
 import ProfilePage from "@/components/Profile/ProfilePage";
 import Sidebar from "@/components/sidebar/Sidebar";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useEffect } from "react";
 
 const styles = {
 	wrapper: `lg:max-w-7xl m-auto h-screen bg-[#00000] text-white overflow-hidden`,
@@ -10,6 +12,11 @@ const styles = {
 };
 
 const Profile = () => {
+	const { data: session } = useSession();
+	const router = useRouter();
+	useEffect(() => {
+		if (!session) router.push("/login");
+	}, []);
 	return (
 		<>
 			<Head>
@@ -25,7 +32,7 @@ const Profile = () => {
 			<main className={styles.wrapper}>
 				<div className={styles.content}>
 					<Sidebar />
-					<div className=" grid grid-cols-9 will-change-scroll col-span-7 h-screen overflow-auto overscroll-auto scroll-smooth scrollbar-hide">
+					<div className=" will-change-scroll grid grid-cols-9 col-span-9 sm:col-span-7 h-screen overflow-auto scroll-smooth scrollbar-hide">
 						<ProfilePage />
 						<Widget />
 					</div>

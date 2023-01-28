@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import Posts from "../Home/Posts";
 
 const styles = {
-	wrapper: `col-span-7 lg:col-span-5 min-w-fit border-r will-change-scroll border-l border-[#38444d]/60 sticky top-0 h-screen min-h-full scroll-smooth scrollbar-hide overflow-y-auto`,
+	wrapper: `col-span-9  sm:col-span-7 lg:col-span-5 min-w-fit border-r will-change-scroll border-l border-[#38444d]/60 sticky top-0 h-screen min-h-full scroll-smooth scrollbar-hide overflow-y-auto`,
 	headWrapper: `sticky right-0 left-0 bg-black/70 m-0  backdrop-contrast-75 backdrop-brightness-75   border-b border-[#38444d]/60  top-0 backdrop-blur z-10`,
 	icon: `font-bold text-[1.2rem] rounded-full w-9 h-9 hover:bg-[#191919] flex justify-center items-center`,
 };

@@ -5,6 +5,7 @@ import { FaRegComment, FaRetweet } from "react-icons/fa";
 import { FiShare } from "react-icons/fi";
 import { AiOutlineHeart } from "react-icons/ai";
 import { TbBrandGoogleAnalytics } from "react-icons/tb";
+import { useSession } from "next-auth/react";
 
 const styles = {
 	wrapper: `flex p-3 border-b border-[#38444d]/60`,
@@ -15,10 +16,10 @@ const styles = {
 	verified: `text-[0.8rem]`,
 	handleAndTimeAgo: `text-[#8899a6] ml-1`,
 	tweet: `my-2`,
-	tweetmedia: "w-[650] h-[420] rounded-2xl cover object-fit image",
+	tweetmedia: "w-[650] select-none pointer-events-none h-[420] rounded-2xl cover object-fit image",
 	image: `rounded-3xl`,
 	footer: `flex justify-between  mt-2 text-[#8899a6]`,
-	footerIcon: `rounded-full p-[0.3rem] text-[1rem]`,
+	footerIcon: `rounded-full p-[0.3rem] text-[1rem] flex  relative items-center gap-0`,
 };
 
 const Posts = ({
@@ -29,7 +30,11 @@ const Posts = ({
 	isProfileImageNFT,
 	avatar,
 	tweetmedia,
+	isVerified,
+	comentsCount,
+	likesCount,
 }) => {
+	const data = useSession();
 	return (
 		<div className={styles.wrapper}>
 			<div>
@@ -48,11 +53,16 @@ const Posts = ({
 						<span className={styles.name}>{displayName}</span>
 						{isProfileImageNFT && (
 							<span className={styles.verified}>
+								<BsFillPatchCheckFill color="#Ffd700" />
+							</span>
+						)}
+						{isVerified && (
+							<span className={styles.verified}>
 								<BsFillPatchCheckFill color="#1DA1F2" />
 							</span>
 						)}
 						<span className={styles.handleAndTimeAgo}>
-							@{username} ● {format(new Date(timestamp).getTime())}
+							{username} ● {format(new Date(timestamp.seconds * 1000).getTime())}
 						</span>
 					</span>
 					<div className={styles.tweet}>{text}</div>
@@ -60,13 +70,19 @@ const Posts = ({
 				</div>
 				<div className={styles.footer}>
 					<span className={`${styles.footerIcon} hover:bg-[#1e364a] hover:text-[#1d9bf0]`}>
-						<FaRegComment />
+						<FaRegComment />{" "}
+						<span className="text-xs absolute top-0 left-5 font-semibold">
+							{comentsCount > 0 && comentsCount}
+						</span>
 					</span>
 					<span className={`${styles.footerIcon} hover:text-[#03ba7c] hover:bg-[#1b393b]`}>
 						<FaRetweet />
 					</span>
 					<span className={`${styles.footerIcon} hover:text-[#f91c80] hover:bg-[#39243c]`}>
 						<AiOutlineHeart />
+						<span className="text-xs absolute top-0 left-5 font-semibold">
+							{likesCount > 0 && likesCount}
+						</span>
 					</span>
 					<span className={`${styles.footerIcon} hover:text-[#1d9bf0] hover:bg-[#1e364a]`}>
 						<TbBrandGoogleAnalytics />

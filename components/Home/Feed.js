@@ -1,21 +1,44 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsStars } from "react-icons/bs";
 import TweetBox from "@/components/Home/TweetBox";
 import Posts from "@/components/Home/Posts";
-import { tweets } from "@/data/staticData";
+import dataBase from "@/utils/firebase";
+import { collection, doc, getDocs } from "firebase/firestore";
+import { ImSpinner9 } from "react-icons/im";
 
 const styles = {
-	wrapper: `col-span-7 lg:col-span-5 min-w-fit border-r will-change-scroll border-l border-[#38444d]/60 sticky top-0 h-screen min-h-full scroll-smooth scrollbar-hide overflow-y-auto`,
+	wrapper: `col-span-9 sm:col-span-7 lg:col-span-5  border-r will-change-scroll border-l border-[#38444d]/60 sticky top-0 h-screen min-h-full scroll-smooth scrollbar-hide overflow-y-auto`,
 	headWrapper: `sticky right-0 left-0 bg-black/70 m-0 backdrop-contrast-75 backdrop-brightness-75 border-b border-[#38444d]/60  top-0 backdrop-blur z-10`,
 	header: ` flex justify-between items-center p-3 pl-4`,
 	headerTab: `flex justify-center items-center `,
-	headerButton: `w-full text-center bg-transparent mb-1 hover:bg-[#191919]  p-3`,
-	headerButtonActive: `font-medium w-full text-center hover:bg-[#191919] decoration-[0.2rem] p-3 bg-transparent underline underline-offset-[0.9rem] decoration-blue-400`,
+	headerButton: `font-light text-ls`,
+	headerButtonActive: `font-bold text-[0.95rem] flex justify-center items-center  w-full relative before:absolute before:top-[1.8rem] before:left-[25%] before:content-[''] before:w-[50%] before:h-[2px] before:bg-[#1d9bf0]`,
 	headerTitle: `text-xl font-bold`,
 };
 
 const Feed = () => {
 	const [feedtype, setFeedtype] = useState("foryou");
+	const [tweetPost, setTweetPost] = useState([]);
+	const [postOwners, setPostOwners] = useState([]);
+	const [comments, setComments] = useState([]);
+	const [likes, setLikes] = useState([]);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		const getPost = async () => {
+			setLoading(true);
+			const postsSnapshot = await getDocs(collection(dataBase, "posts"));
+			setTweetPost(postsSnapshot.docs.map((doc) => doc.data()));
+			const usersSnapshot = await getDocs(collection(dataBase, "users"));
+			setPostOwners(usersSnapshot.docs.map((doc) => doc.data()));
+			const commentsSnapshot = await getDocs(collection(dataBase, "comments"));
+			setComments(commentsSnapshot.docs.map((doc) => doc.data()));
+			const likesSnapshot = await getDocs(collection(dataBase, "likes"));
+			await likesSnapshot.forEach((doc) => setLikes(doc.data()));
+			setLoading(false);
+		};
+		getPost();
+	}, []);
 
 	return (
 		<div className={styles.wrapper}>
@@ -25,44 +48,61 @@ const Feed = () => {
 					<BsStars />
 				</div>
 				<div className={styles.headerTab}>
-					<button
-						id={"foryou"}
-						className={styles.headerButtonActive}
+					<div
 						onClick={(e) => {
-							e.target.className = styles.headerButtonActive;
+							e.currentTarget.childNodes[0].className = styles.headerButtonActive;
 							setFeedtype("foryou");
 							document.getElementById("againstyou").className = styles.headerButton;
 						}}
+						className="w-full flex justify-center items-center h-[3rem] cursor-pointer hover:bg-[#191919]"
 					>
-						For You
-					</button>
-					<button
-						id={"againstyou"}
-						className={styles.headerButton}
+						<span id={"foryou"} className={styles.headerButtonActive}>
+							For You
+						</span>
+					</div>
+					<div
 						onClick={(e) => {
-							e.target.className = styles.headerButtonActive;
+							e.currentTarget.childNodes[0].className = styles.headerButtonActive;
 							setFeedtype("againstyou");
 							document.getElementById("foryou").className = styles.headerButton;
 						}}
+						className="w-full flex justify-center items-center h-[3rem] cursor-pointer hover:bg-[#191919]"
 					>
-						Against You
-					</button>
+						<span id={"againstyou"} className={styles.headerButton}>
+							Against You
+						</span>
+					</div>
 				</div>
 			</div>
 
 			<TweetBox />
-			{tweets.map((tweet, index) => (
-				<Posts
-					key={index}
-					displayName={tweet.displayName}
-					username={`${tweet.username.slice(0, 4)}...${tweet.username.slice(-4)}`}
-					text={tweet.text}
-					avatar={tweet.avatar}
-					timestamp={tweet.timestamp}
-					tweetmedia={tweet.media}
-					isProfileImageNFT={tweet.isProfileImageNFT}
+			{!loading ? (
+				tweetPost.map((tweet, index) => {
+					const postOwner = postOwners.find((owner) => owner.customId === tweet.postOwer);
+
+					return (
+						<Posts
+							key={index}
+							displayName={postOwner?.firstName}
+							username={postOwner?.customId}
+							text={tweet?.tweetMessage}
+							avatar={postOwner?.avatar}
+							timestamp={tweet?.timestamp}
+							tweetmedia={tweet?.tweetImage}
+							likesCount={tweet?.likesCount}
+							comentsCount={tweet?.comentsCount}
+							isProfileImageNFT={postOwner?.nftVerified}
+							isVerified={postOwner?.verifiedNormal}
+						/>
+					);
+				})
+			) : (
+				<ImSpinner9
+					color={"#1DA1F2"}
+					size="30"
+					className="text-center w-full mt-20 animate-spin"
 				/>
-			))}
+			)}
 
 			<div className={"flex flex-col justify-center items-center"}></div>
 		</div>

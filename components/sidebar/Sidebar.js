@@ -27,9 +27,8 @@ const styles = {
 	moreContainer: `flex items-center mr-2 hidden lg:flex`,
 };
 
-const Sidebar = ({ initialSelectedIcon = "Home" }) => {
-	const [selected, setSelected] = useState(initialSelectedIcon);
-	const data = useSession();
+const Sidebar = ({ activeLink = "Home", user }) => {
+	const [selected, setSelected] = useState(activeLink);
 
 	return (
 		<div className={styles.wrapper}>
@@ -102,12 +101,14 @@ const Sidebar = ({ initialSelectedIcon = "Home" }) => {
 				}}
 			>
 				<div className={styles.profileLeft}>
-					<img className={styles.profileImage} src={data?.data?.user?.image} alt={""} />
+					<img className={styles.profileImage} src={user?.avatar} alt={""} />
 				</div>
 				<div className={styles.profileRight}>
 					<div className={styles.details}>
-						<div className={styles.name}>{data?.data?.user?.name}</div>
-						<div className={styles.handle}>@{data?.data?.user?.email?.split("@")[0]}</div>
+						<div className={styles.name}>
+							{user?.firstName} {user?.lastName}
+						</div>
+						<div className={styles.handle}>{user?.customId}</div>
 					</div>
 
 					<div className={styles.moreContainer}>

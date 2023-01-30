@@ -3,7 +3,7 @@ import { BsStars } from "react-icons/bs";
 import TweetBox from "@/components/Home/TweetBox";
 import Posts from "@/components/Home/Posts";
 import dataBase from "@/utils/firebase";
-import { collection, doc, getDocs } from "firebase/firestore";
+import { collection, doc, getDocs, onSnapshot } from "firebase/firestore";
 import { ImSpinner9 } from "react-icons/im";
 
 const styles = {
@@ -20,25 +20,21 @@ const Feed = () => {
 	const [feedtype, setFeedtype] = useState("foryou");
 	const [tweetPost, setTweetPost] = useState([]);
 	const [postOwners, setPostOwners] = useState([]);
-	const [comments, setComments] = useState([]);
-	const [likes, setLikes] = useState([]);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		const getPost = async () => {
 			setLoading(true);
-			const postsSnapshot = await getDocs(collection(dataBase, "posts"));
-			setTweetPost(postsSnapshot.docs.map((doc) => doc.data()));
-			const usersSnapshot = await getDocs(collection(dataBase, "users"));
-			setPostOwners(usersSnapshot.docs.map((doc) => doc.data()));
-			const commentsSnapshot = await getDocs(collection(dataBase, "comments"));
-			setComments(commentsSnapshot.docs.map((doc) => doc.data()));
-			const likesSnapshot = await getDocs(collection(dataBase, "likes"));
-			await likesSnapshot.forEach((doc) => setLikes(doc.data()));
+			await onSnapshot(collection(dataBase, "posts"), async (snapshot) =>
+				setTweetPost(await snapshot.docs.map((doc) => doc.data()))
+			);
+			await onSnapshot(collection(dataBase, "users"), async (snapshot) =>
+				setPostOwners(await snapshot.docs.map((doc) => doc.data()))
+			);
 			setLoading(false);
 		};
 		getPost();
-	}, []);
+	}, [dataBase]);
 
 	return (
 		<div className={styles.wrapper}>
@@ -54,7 +50,7 @@ const Feed = () => {
 							setFeedtype("foryou");
 							document.getElementById("againstyou").className = styles.headerButton;
 						}}
-						className="w-full flex justify-center items-center h-[3rem] cursor-pointer hover:bg-[#191919]"
+						className="w-full flex justify-center items-center  transition-all   h-[3rem] cursor-pointer hover:bg-[#191919]"
 					>
 						<span id={"foryou"} className={styles.headerButtonActive}>
 							For You
@@ -66,7 +62,7 @@ const Feed = () => {
 							setFeedtype("againstyou");
 							document.getElementById("foryou").className = styles.headerButton;
 						}}
-						className="w-full flex justify-center items-center h-[3rem] cursor-pointer hover:bg-[#191919]"
+						className="w-full flex justify-center  transition-all   items-center h-[3rem] cursor-pointer hover:bg-[#191919]"
 					>
 						<span id={"againstyou"} className={styles.headerButton}>
 							Against You
@@ -78,8 +74,8 @@ const Feed = () => {
 			<TweetBox />
 			{!loading ? (
 				tweetPost.map((tweet, index) => {
-					const postOwner = postOwners.find((owner) => owner.customId === tweet.postOwer);
-
+					const postOwner = postOwners.find((owner) => owner.email === tweet.postOwner);
+					if (tweet && postOwner);
 					return (
 						<Posts
 							key={index}
@@ -90,7 +86,7 @@ const Feed = () => {
 							timestamp={tweet?.timestamp}
 							tweetmedia={tweet?.tweetImage}
 							likesCount={tweet?.likesCount}
-							comentsCount={tweet?.comentsCount}
+							commentsCount={tweet?.commentsCount}
 							isProfileImageNFT={postOwner?.nftVerified}
 							isVerified={postOwner?.verifiedNormal}
 						/>

@@ -14,10 +14,10 @@ const styles = {
 	inputField: `w-full outline-none bg-transparent text-medium h-auto resize-y min-h-[3rem] scrollbar-hide`,
 	formLowerContainer: `flex w-full py-3`,
 	iconsContainer: `text-[#1d9bf0] flex flex-1 items-center flex-wrap sm:flex-nowrap`,
-	icon: `mr-1 font-bold text-[1.2rem] rounded-full w-9 h-9 hover:bg-[#191919] flex justify-center items-center`,
+	icon: `mr-1 font-bold text-[1.2rem] rounded-full w-9 h-9  transition-all   hover:bg-[#191919] flex justify-center items-center`,
 	submitGeneral: `px-6 py-2 rounded-3xl font-bold`,
-	inactiveSubmit: `bg-[#196195] text-[#95999r] h-fit sm:h-full rounded-3xl px-4 py-[0.45rem]`,
-	activeSubmit: `bg-[#1d9bf0] text-white rounded-3xl h-fit sm:h-full font-bold px-4 py-[0.45rem]`,
+	inactiveSubmit: `bg-[#196195]  transition-all   text-[#95999r] h-fit sm:h-full rounded-3xl px-4 py-[0.45rem]`,
+	activeSubmit: `bg-[#1d9bf0]   transition-all  text-white rounded-3xl h-fit sm:h-full font-bold px-4 py-[0.45rem]`,
 };
 
 const TweetBox = () => {

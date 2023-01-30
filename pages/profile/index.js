@@ -1,22 +1,32 @@
 import Widget from "@/components/Home/Widget";
 import ProfilePage from "@/components/Profile/ProfilePage";
 import Sidebar from "@/components/sidebar/Sidebar";
-import { useSession } from "next-auth/react";
+import { useFetechuser } from "@/redux/reduxActions";
+import { STATES } from "@/utils/enums";
+import dataBase from "@/utils/firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { getSession, useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
+import { ImSpinner9 } from "react-icons/im";
+import { useDispatch, useSelector } from "react-redux";
 
 const styles = {
-	wrapper: `lg:max-w-7xl m-auto h-screen bg-[#00000] text-white overflow-hidden`,
+	wrapper: `lg:max-w-7xl m-auto flex items-center justify-center h-screen bg-[#00000] text-white overflow-hidden`,
 	content: `grid grid-cols-9`,
 };
 
 const Profile = () => {
+	const dispatch = useDispatch();
+	const user = useSelector((state) => state.logedinUser);
 	const { data: session } = useSession();
-	const router = useRouter();
 	useEffect(() => {
-		if (!session) router.push("/login");
-	}, []);
+		if (user.state === STATES.LOADING) {
+			const fetchUser = async () => await dispatch(useFetechuser(session.user.email));
+			fetchUser();
+		}
+	}, [dispatch, session, user]);
 	return (
 		<>
 			<Head>
@@ -30,16 +40,58 @@ const Profile = () => {
 				<meta httpEquiv="X-UA-Compatible" content="ie=edge" />
 			</Head>
 			<main className={styles.wrapper}>
-				<div className={styles.content}>
-					<Sidebar />
-					<div className=" will-change-scroll grid grid-cols-9 col-span-9 sm:col-span-7 h-screen overflow-auto scroll-smooth scrollbar-hide">
-						<ProfilePage />
-						<Widget />
+				{user.state !== STATES.SUCCESS ? (
+					<ImSpinner9
+						color={"#1DA1F2"}
+						size="30"
+						className="text-center w-full mt-20 animate-spin"
+					/>
+				) : (
+					<div className={styles.content}>
+						<Sidebar user={user.data} activeLink={"Profile"} />
+						<div className=" will-change-scroll grid grid-cols-9 col-span-9 sm:col-span-7 h-screen overflow-auto scroll-smooth scrollbar-hide">
+							<ProfilePage user={user.data} />
+							<Widget />
+						</div>
 					</div>
-				</div>
+				)}
 			</main>
 		</>
 	);
 };
 
 export default Profile;
+
+export async function getServerSideProps({ req }) {
+	const session = await getSession({ req });
+	if (!session) {
+		return {
+			redirect: {
+				destination: "/login",
+				permanent: false,
+			},
+		};
+	}
+	const userExist = await getDoc(doc(dataBase, "users", session.user.email));
+	if (!userExist.exists()) {
+		await setDoc(doc(dataBase, "users", session.user.email), {
+			avatar: session.user.image,
+			firstName: session.user.name.split(" ")[0],
+			lastName: session.user.name.split(" ")[1],
+			email: session.user.email,
+			customId: `@${session.user.email.split("@")[0]}`,
+			followers: [],
+			followings: [],
+			nftVerified: false,
+			coverImage: "",
+			timestamp: new Date(),
+			tweets: [],
+			verifiedNormal: false,
+		});
+	}
+	return {
+		props: {
+			session,
+		},
+	};
+}

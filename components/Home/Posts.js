@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BsFillPatchCheckFill } from "react-icons/bs";
 import { format } from "timeago.js";
 import { FaRegComment, FaRetweet } from "react-icons/fa";
@@ -6,6 +6,8 @@ import { FiShare } from "react-icons/fi";
 import { AiOutlineHeart } from "react-icons/ai";
 import { TbBrandGoogleAnalytics } from "react-icons/tb";
 import { useSession } from "next-auth/react";
+import dataBase from "@/utils/firebase";
+import { collection, onSnapshot } from "firebase/firestore";
 
 const styles = {
 	wrapper: `flex p-3 border-b border-[#38444d]/60`,
@@ -31,10 +33,20 @@ const Posts = ({
 	avatar,
 	tweetmedia,
 	isVerified,
-	comentsCount,
+	commentsCount,
 	likesCount,
 }) => {
-	const data = useSession();
+	const [comments, setComments] = useState([]);
+
+	useEffect(() => {
+		const getComments = async () => {
+			await onSnapshot(collection(dataBase, "comments"), (snapshot) =>
+				setComments(snapshot.docs.map((doc) => doc.data()))
+			);
+		};
+		getComments();
+	}, [dataBase]);
+
 	return (
 		<div className={styles.wrapper}>
 			<div>
@@ -72,7 +84,7 @@ const Posts = ({
 					<span className={`${styles.footerIcon} hover:bg-[#1e364a] hover:text-[#1d9bf0]`}>
 						<FaRegComment />{" "}
 						<span className="text-xs absolute top-0 left-5 font-semibold">
-							{comentsCount > 0 && comentsCount}
+							{commentsCount > 0 && commentsCount}
 						</span>
 					</span>
 					<span className={`${styles.footerIcon} hover:text-[#03ba7c] hover:bg-[#1b393b]`}>

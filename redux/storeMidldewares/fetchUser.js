@@ -12,9 +12,7 @@ const fetchUser = createAsyncThunk("fetchUser", async (email) => {
 			await getDocs(q)
 		).docs.map((document) => JSON.parse(JSON.stringify(document.data())));
 		if (fetcheddata.length > 0) return fetcheddata[0];
-	} catch (error) {
-		console.log("🚀 ~ file: fetchUser.js:16 ~ fetchUser ~ error", error);
-	}
+	} catch (error) {}
 });
 
 export default fetchUser;

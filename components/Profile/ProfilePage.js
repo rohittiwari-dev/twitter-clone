@@ -1,4 +1,3 @@
-import { tweets } from "@/data/staticData";
 import React, { useEffect, useState } from "react";
 import { IoArrowBack } from "react-icons/io5";
 import Cover from "./Cover";
@@ -33,7 +32,7 @@ const ProfilePage = ({ user }) => {
 			setLoading(false);
 		};
 		getPost();
-	}, [dataBase]);
+	}, []);
 
 	return (
 		<div className={styles.wrapper}>
@@ -71,6 +70,8 @@ const ProfilePage = ({ user }) => {
 							timestamp={tweet?.timestamp}
 							tweetmedia={tweet?.tweetImage}
 							likesCount={tweet?.likesCount}
+							likes={tweet.likes}
+							tweetId={tweet.tweetId}
 							commentsCount={tweet?.commentsCount}
 							isProfileImageNFT={postOwner?.nftVerified}
 							isVerified={postOwner?.verifiedNormal}

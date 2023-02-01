@@ -1,6 +1,7 @@
 import React from "react";
 import { BiSearch } from "react-icons/bi";
 import { news, whoToFollow } from "@/data/staticData";
+import Image from "next/image";
 
 const styles = {
 	wrapper: `p-4 mr-5 h-fit col-span-4 hidden lg:inline`,
@@ -22,7 +23,7 @@ const styles = {
 	profileDetails: `flex-1`,
 	name: `font-bold`,
 	handle: `text-[#8899a6]`,
-	followButton: `bg-white text-black px-3 py-1 rounded-full text-xs font-bold`,
+	followButton: `bg-white text-black w-fit mt-1 hover:bg-pink-500 px-3 py-1 rounded-full text-xs font-bold`,
 };
 
 const Widget = () => {
@@ -43,7 +44,14 @@ const Widget = () => {
 							<div className={styles.newsItemTitle}>{news.title}</div>
 						</div>
 						<div className={styles.newsItemRight}>
-							<img src={news.image} alt={news.category} className={styles.newsItemImage} />
+							<Image
+								width={600}
+								height={100}
+								quality={100}
+								src={news.image}
+								alt={news.category}
+								className={styles.newsItemImage}
+							/>
 						</div>
 					</div>
 				))}
@@ -54,12 +62,26 @@ const Widget = () => {
 				{whoToFollow.map((item, index) => (
 					<div key={index} className={styles.item}>
 						<div className={styles.followAvatarContainer}>
-							<img src={item.avatar} alt={item.name} className={styles.followAvatar} />
+							<Image
+								width={600}
+								height={100}
+								quality={100}
+								src={item.avatar}
+								alt={item.name}
+								className={styles.followAvatar}
+							/>
 						</div>
 						<div>
 							<div className={styles.name}>{item.name}</div>
 							<div className={styles.handle}>{item.handle}</div>
-							<div className={styles.followButton}>Follow</div>
+							<a
+								href={item.follow}
+								rel="noreferrer"
+								target={"_blank"}
+								className={styles.followButton}
+							>
+								Follow
+							</a>
 						</div>
 					</div>
 				))}

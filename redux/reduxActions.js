@@ -6,4 +6,4 @@ import fetchUser from "./storeMidldewares/fetchUser";
 export const { resetUserData } = userSlice.actions;
 
 /* Thunk Action Hooks */
-export const useFetechuser = fetchUser;
+export const fetchUsers = fetchUser;

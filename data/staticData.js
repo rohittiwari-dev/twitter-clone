@@ -1,124 +1,38 @@
-export const tweets = [
-	{
-		displayName: "Rohit",
-		text: "I love this place",
-		timestamp: "2023-09-10T12:00:00.000Z",
-		username: "0xF6eb2f6D790b7571751e5803d86De376B248e11d",
-		isProfileImageNFT: false,
-		media: "https://pbs.twimg.com/card_img/1616995157085388802/N9MEM0lR?format=jpg&name=small",
-		avatar:
-			"https://www.freepngimg.com/thumb/facebook/62681-flat-icons-face-computer-design-avatar-icon.png",
-	},
-	{
-		displayName: "Rohit",
-		text: "I love this place",
-		timestamp: "2020-09-10T12:00:00.000Z",
-		username: "0xF6eb2f6D790b7571751e5803d86De376B248e11d",
-		isProfileImageNFT: true,
-		avatar: "https://monks.prometheans.xyz/monks/NBrfFTzvH3jnRK.png",
-	},
-	{
-		displayName: "Rohit",
-		text: "I love this place",
-		timestamp: "2022-07-10T12:21:00.000Z",
-		username: "0xF6eb2f6D790b7571751e5803d86De376B248e11d",
-		isProfileImageNFT: false,
-		avatar:
-			"https://www.freepngimg.com/thumb/facebook/62681-flat-icons-face-computer-design-avatar-icon.png",
-	},
-	{
-		displayName: "Rohit",
-		text: "I love this place",
-		timestamp: "2022-07-10T12:21:00.000Z",
-		username: "0xF6eb2f6D790b7571751e5803d86De376B248e11d",
-		isProfileImageNFT: false,
-		avatar:
-			"https://www.freepngimg.com/thumb/facebook/62681-flat-icons-face-computer-design-avatar-icon.png",
-	},
-	{
-		displayName: "Rohit",
-		text: "I love this place",
-		timestamp: "2022-07-10T12:21:00.000Z",
-		username: "0xF6eb2f6D790b7571751e5803d86De376B248e11d",
-		isProfileImageNFT: false,
-		media: "https://th.bing.com/th/id/R.5022bc42e21d7b5d3150238047fe54c8?rik=hCU1W%2bYIWxWebw&riu=http%3a%2f%2fwallpaperheart.com%2fwp-content%2fuploads%2f2018%2f04%2fbeautiful-nature-high-definition-wallpaper_beautiful-backgrounds.jpg&ehk=fSV8hpj%2bFjKJoUHMtZS30tQaaWHli4Fp0hmNgySLnWs%3d&risl=&pid=ImgRaw&r=0",
-		avatar:
-			"https://www.freepngimg.com/thumb/facebook/62681-flat-icons-face-computer-design-avatar-icon.png",
-	},
-	{
-		displayName: "Rohit",
-		text: "I love this place",
-		timestamp: "2020-09-10T12:00:00.000Z",
-		username: "0xF6eb2f6D790b7571751e5803d86De376B248e11d",
-		isProfileImageNFT: true,
-		avatar: "https://monks.prometheans.xyz/monks/NBrfFTzvH3jnRK.png",
-	},
-	{
-		displayName: "Rohit",
-		text: "I love this place",
-		timestamp: "2022-07-10T12:21:00.000Z",
-		username: "0xF6eb2f6D790b7571751e5803d86De376B248e11d",
-		isProfileImageNFT: false,
-		avatar:
-			"https://www.freepngimg.com/thumb/facebook/62681-flat-icons-face-computer-design-avatar-icon.png",
-	},
-	{
-		displayName: "Rohit",
-		text: "I love this place",
-		timestamp: "2022-07-10T12:21:00.000Z",
-		username: "0xF6eb2f6D790b7571751e5803d86De376B248e11d",
-		isProfileImageNFT: false,
-		avatar:
-			"https://www.freepngimg.com/thumb/facebook/62681-flat-icons-face-computer-design-avatar-icon.png",
-	},
-	{
-		displayName: "Rohit",
-		text: "I love this place",
-		timestamp: "2022-07-10T12:21:00.000Z",
-		username: "0xF6eb2f6D790b7571751e5803d86De376B248e11d",
-		isProfileImageNFT: false,
-		avatar:
-			"https://www.freepngimg.com/thumb/facebook/62681-flat-icons-face-computer-design-avatar-icon.png",
-	},
-];
-
 export const news = [
 	{
-		category: "Clever Programmer • LIVE",
-		title: "CP is live on YouTube!",
-		image: "https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/themes/284832/settings_images/rLlCifhXRJiT0RoN2FjK_Logo_roundbackground_black.png",
+		category: "Instagram",
+		title: "Available on Instagram",
+		image: "https://th.bing.com/th?id=OIP.lQRk_LuIIh-6LXK9jplxGAHaHZ&w=250&h=249&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2",
 	},
 	{
-		category: "Databases • Trending",
-		title: "Sanity is giving you free Boosted plan, use --coupon cleverprogrammer",
-		image: "https://avatars.githubusercontent.com/u/17177659?s=280&v=4",
+		category: "Twitter",
+		title: "Available on Twitter",
+		image: "https://th.bing.com/th?id=OIP.H836RvDYYgQZcZn0TC8qBAHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2",
 	},
 	{
-		category: "Web3.0 • Trending",
-		title: "Blockchain developers make over $150k",
-		image: "https://cloudfront-us-east-1.images.arcpublishing.com/coindesk/L424HUS65FGRVFPTYYPG24CIYI.jpg",
-	},
-	{
-		category: "ReactJS • Trending",
-		title: "Join Profit with React while spots last",
-		image: "https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/site/18907/products/cIkAZXNyRZimRw4uqXVX_gDvYTtwQsC33KZqCtbpB_image.jpg",
+		category: "Facebook",
+		title: "Available on Facebook",
+		image: "https://th.bing.com/th/id/OIP.XW6jinaUmN_Bn-Y4nRTbOQHaHa?w=175&h=180&c=7&r=0&o=5&pid=1.7",
 	},
 ];
 
 export const whoToFollow = [
 	{
-		name: "Rafeh Qazi",
-		handle: "@cleverqazi",
-		avatar: "https://cdn.iconscout.com/icon/free/png-512/avatar-370-456322.png",
+		name: "Rohit Tiwari",
+		handle: "Website@Portfolio",
+		avatar: "https://prorohit.netlify.app/assets/profileArtifact.514dd40d.png",
+		follow: "https://prorohit.netlify.app",
 	},
 	{
-		name: "David Rakosi",
-		handle: "@0xDavidRakosi",
-		avatar: "https://pbs.twimg.com/profile_images/1282571486465855491/98xO6N0F_400x400.jpg",
+		name: "Rohit Tiwari",
+		handle: "Twitter/@dev24_tiwari",
+		avatar: "https://prorohit.netlify.app/assets/profileArtifact.514dd40d.png",
+		follow: "https://twitter.com/dev24_tiwari",
 	},
 	{
-		name: "Sanity.io",
-		handle: "@sanity_io",
-		avatar: "https://avatars.githubusercontent.com/u/17177659?s=280&v=4",
+		name: "Rohit Tiwari",
+		handle: "Instagram/@dev24_tiwari",
+		avatar: "https://prorohit.netlify.app/assets/profileArtifact.514dd40d.png",
+		follow: "https://instagram.com/dev24_tiwari",
 	},
 ];

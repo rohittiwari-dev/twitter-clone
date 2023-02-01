@@ -6,11 +6,17 @@ import { RiFileList2Fill, RiHome7Fill, RiHome7Line } from "react-icons/ri";
 import { BiHash } from "react-icons/bi";
 import { FaBell, FaHashtag, FaRegListAlt } from "react-icons/fa";
 import { HiMail, HiOutlineMail } from "react-icons/hi";
-import { BsBookmark, BsBookmarkFill, BsPerson, BsPersonFill } from "react-icons/bs";
+import {
+	BsBookmark,
+	BsBookmarkFill,
+	BsFillPatchCheckFill,
+	BsPerson,
+	BsPersonFill,
+} from "react-icons/bs";
 import { CgMoreO } from "react-icons/cg";
 import TbSend from "@/assets/Twitter-Send-Svg.png";
 import Image from "next/image";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 
 const styles = {
 	wrapper: `items-end lg:items-start flex-col h-screen col-span-2 ml-2 hidden sm:flex`,
@@ -22,7 +28,7 @@ const styles = {
 	profileImage: `h-10 w-10 rounded-full`,
 	profileRight: `flex-1 flex justify-between hidden gap-5 lg:flex`,
 	details: `flex-1`,
-	name: `text-sm font-semibold pb-0`,
+	name: `text-sm font-semibold pb-0 flex gap-1 items-center`,
 	handle: `text-sm pt-0 text-[#8899a6]`,
 	moreContainer: `flex items-center mr-2 hidden lg:flex`,
 };
@@ -101,11 +107,20 @@ const Sidebar = ({ activeLink = "Home", user }) => {
 				}}
 			>
 				<div className={styles.profileLeft}>
-					<img className={styles.profileImage} src={user?.avatar} alt={""} />
+					<Image
+						width={600}
+						height={100}
+						quality={100}
+						className={styles.profileImage}
+						src={user?.avatar}
+						alt={""}
+					/>
 				</div>
 				<div className={styles.profileRight}>
 					<div className={styles.details}>
 						<div className={styles.name}>
+							{user.nftVerified && <BsFillPatchCheckFill color="#Ffd700" />}
+							{user.verifiedNormal && <BsFillPatchCheckFill color="#1DA1F2" />}
 							{user?.firstName} {user?.lastName}
 						</div>
 						<div className={styles.handle}>{user?.customId}</div>

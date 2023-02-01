@@ -1,13 +1,12 @@
 import Widget from "@/components/Home/Widget";
 import ProfilePage from "@/components/Profile/ProfilePage";
 import Sidebar from "@/components/sidebar/Sidebar";
-import { useFetechuser } from "@/redux/reduxActions";
+import { fetchUsers } from "@/redux/reduxActions";
 import { STATES } from "@/utils/enums";
 import dataBase from "@/utils/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { getSession, useSession } from "next-auth/react";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { ImSpinner9 } from "react-icons/im";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,7 +22,7 @@ const Profile = () => {
 	const { data: session } = useSession();
 	useEffect(() => {
 		if (user.state === STATES.LOADING) {
-			const fetchUser = async () => await dispatch(useFetechuser(session.user.email));
+			const fetchUser = async () => await dispatch(fetchUsers(session.user.email));
 			fetchUser();
 		}
 	}, [dispatch, session, user]);
@@ -32,7 +31,7 @@ const Profile = () => {
 			<Head>
 				<title>Profile / Twitter</title>
 				<meta charSet="UTF-8" />
-				<link rel="shortcut icon" href="//abs.twimg.com/favicons/twitter.2.ico" />
+				<link rel="shortcut icon" href="https://abs.twimg.com/favicons/twitter.2.ico" />
 				<meta
 					name="viewport"
 					content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"

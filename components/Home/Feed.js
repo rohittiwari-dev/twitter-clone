@@ -3,7 +3,7 @@ import { BsStars } from "react-icons/bs";
 import TweetBox from "@/components/Home/TweetBox";
 import Posts from "@/components/Home/Posts";
 import dataBase from "@/utils/firebase";
-import { collection, doc, getDocs, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { ImSpinner9 } from "react-icons/im";
 
 const styles = {
@@ -16,7 +16,7 @@ const styles = {
 	headerTitle: `text-xl font-bold`,
 };
 
-const Feed = () => {
+const Feed = ({ user }) => {
 	const [feedtype, setFeedtype] = useState("foryou");
 	const [tweetPost, setTweetPost] = useState([]);
 	const [postOwners, setPostOwners] = useState([]);
@@ -25,8 +25,9 @@ const Feed = () => {
 	useEffect(() => {
 		const getPost = async () => {
 			setLoading(true);
-			await onSnapshot(collection(dataBase, "posts"), async (snapshot) =>
-				setTweetPost(await snapshot.docs.map((doc) => doc.data()))
+			await onSnapshot(
+				query(collection(dataBase, "posts"), orderBy("timestamp", "desc")),
+				async (snapshot) => setTweetPost(await snapshot.docs.map((doc) => doc.data()))
 			);
 			await onSnapshot(collection(dataBase, "users"), async (snapshot) =>
 				setPostOwners(await snapshot.docs.map((doc) => doc.data()))
@@ -34,7 +35,7 @@ const Feed = () => {
 			setLoading(false);
 		};
 		getPost();
-	}, [dataBase]);
+	}, []);
 
 	return (
 		<div className={styles.wrapper}>
@@ -71,7 +72,7 @@ const Feed = () => {
 				</div>
 			</div>
 
-			<TweetBox />
+			<TweetBox user={user} />
 			{!loading ? (
 				tweetPost.map((tweet, index) => {
 					const postOwner = postOwners.find((owner) => owner.email === tweet.postOwner);
@@ -79,12 +80,14 @@ const Feed = () => {
 					return (
 						<Posts
 							key={index}
+							tweetId={tweet.tweetId}
 							displayName={postOwner?.firstName}
 							username={postOwner?.customId}
 							text={tweet?.tweetMessage}
 							avatar={postOwner?.avatar}
 							timestamp={tweet?.timestamp}
 							tweetmedia={tweet?.tweetImage}
+							likes={tweet.likes}
 							likesCount={tweet?.likesCount}
 							commentsCount={tweet?.commentsCount}
 							isProfileImageNFT={postOwner?.nftVerified}

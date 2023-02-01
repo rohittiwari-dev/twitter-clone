@@ -1,5 +1,7 @@
+import Image from "next/image";
 import React, { useState } from "react";
 import { BiCalendarEvent } from "react-icons/bi";
+import { BsFillPatchCheckFill } from "react-icons/bs";
 
 const style = {
 	activeTabLink: `font-bold text-[0.95rem] flex justify-center items-center text-medium w-full relative before:absolute before:top-[1.8rem] before:left-[25%] before:content-[''] before:w-[50%] before:h-[2px] before:bg-[#1d9bf0]`,
@@ -14,7 +16,10 @@ const Cover = ({ user }) => {
 				style={{ backgroundImage: `url(${!user.coverImage ? "" : user.coverImage})` }}
 				className="w-full object-cover bg-cover bg-no-repeat flex relative bg-slate-800 h-48"
 			>
-				<img
+				<Image
+					width={100}
+					height={100}
+					quality={100}
 					src={user.avatar}
 					alt=""
 					className="w-36 h-36 border-4 border-black ring-1 rounded-full absolute top-[50%] left-3"
@@ -24,7 +29,9 @@ const Cover = ({ user }) => {
 				</span>
 			</div>
 			<div className="w-full mt-10 p-7 text-lg font-semibold">
-				<h2>
+				<h2 className="flex gap-1 items-center">
+					{user.nftVerified && <BsFillPatchCheckFill color="#Ffd700" />}
+					{user.verifiedNormal && <BsFillPatchCheckFill color="#1DA1F2" />}
 					{user.firstName} {user.lastName}
 				</h2>
 				<p className="text-sm text-slate-400 font-normal">{user.customId}</p>

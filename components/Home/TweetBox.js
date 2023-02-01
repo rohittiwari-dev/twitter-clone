@@ -17,7 +17,7 @@ const styles = {
 	wrapper: `flex w-screen sm:w-full flex-row border-b pt-4 px-4 h-auto border-[#38444d]/60`,
 	tweetBoxLeft: `mr-4 h-fit`,
 	tweetBoxRight: `flex-1 h-max flex flex-col gap-3 justify-center pt-3`,
-	profileImage: `h-10 w-10 rounded-full overflow-hidden object-fit`,
+	profileImage: `h-10 w-10 rounded-full overflow-hidden relative`,
 	inputField: `w-full resize-none outline-none bg-transparent text-medium h-auto min-h-[3rem] scrollbar-hide`,
 	formLowerContainer: `flex w-full py-3`,
 	iconsContainer: `text-[#1d9bf0] flex flex-1 items-center flex-wrap sm:flex-nowrap`,
@@ -76,14 +76,14 @@ const TweetBox = ({ user }) => {
 		<div className={styles.wrapper}>
 			<div className={styles.tweetBoxLeft}>
 				<div className={styles.profileImage}>
-					<Image
-						width={600}
-						height={100}
-						priority={true}
-						quality={100}
-						src={user.avatar}
-						alt={user.firstName}
-					/>
+					{user.avatar && (
+						<Image
+							fill
+							sizes="full"
+							src={`${!user.avatar ? "" : user.avatar}`}
+							alt={"User Profile Image"}
+						/>
+					)}
 				</div>
 			</div>
 			<div className={styles.tweetBoxRight}>
@@ -100,15 +100,15 @@ const TweetBox = ({ user }) => {
 					maxLength="200"
 				></textarea>
 				{selectedImage && (
-					<div className="relative">
+					<div className="relative w-full h-[370px] mr-4  rounded-2xl overflow-hidden ">
 						<Image
-							width={600}
-							height={100}
-							priority={true}
-							quality={100}
-							className="w-[600] h-[370] mr-4 pointer-events-none select-none rounded-2xl cover object-fit image"
+							sizes="100vw"
+							width={0}
+							height={0}
+							style={{ width: "100%", height: "auto" }}
+							priority
 							src={selectedImage}
-							alt=""
+							alt="Tweeted Image"
 						/>
 						<span
 							onClick={() => {

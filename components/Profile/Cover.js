@@ -16,14 +16,13 @@ const Cover = ({ user }) => {
 				style={{ backgroundImage: `url(${!user.coverImage ? "" : user.coverImage})` }}
 				className="w-full object-cover bg-cover bg-no-repeat flex relative bg-slate-800 h-48"
 			>
-				<Image
-					width={100}
-					height={100}
-					quality={100}
-					src={user.avatar}
-					alt=""
-					className="w-36 h-36 border-4 border-black ring-1 rounded-full absolute top-[50%] left-3"
-				/>
+				<div className="w-36 h-36 border-4 border-black ring-1 rounded-full absolute top-[50%] overflow-hidden left-3">
+					<div className="relative w-full h-full">
+						{user.avatar && (
+							<Image priority fill sizes="fill" src={user.avatar} alt="Profile Image" />
+						)}
+					</div>
+				</div>
 				<span className="right-4 border rounded-3xl py-1 px-3 border-[#38444d]/60 hover:bg-[#191919]/60 transition-all  bottom-[-3rem] absolute">
 					Edit Profile
 				</span>

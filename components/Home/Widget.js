@@ -17,9 +17,9 @@ const styles = {
 	newsItemCategory: `text-[#8899a6] text-xs font-semibold`,
 	newsItemTitle: `text-sm font-bold`,
 	newsItemRight: `w-1/5 ml-3`,
-	newsItemImage: `rounded-xl h-14 w-14 object-cover`,
+	newsItemImage: `rounded-xl h-14 w-14 overflow-hidden relative `,
 	followAvatarContainer: `w-1/6`,
-	followAvatar: `rounded-full h-[40px] w-[40px]`,
+	followAvatar: `rounded-full h-[60px] w-[60px] relative overflow-hidden`,
 	profileDetails: `flex-1`,
 	name: `font-bold`,
 	handle: `text-[#8899a6]`,
@@ -44,14 +44,18 @@ const Widget = () => {
 							<div className={styles.newsItemTitle}>{news.title}</div>
 						</div>
 						<div className={styles.newsItemRight}>
-							<Image
-								width={600}
-								height={100}
-								quality={100}
-								src={news.image}
-								alt={news.category}
-								className={styles.newsItemImage}
-							/>
+							<div className={styles.newsItemImage}>
+								{news.image && (
+									<Image
+										sizes="100vw"
+										width={0}
+										height={0}
+										style={{ width: "100%", height: "auto" }}
+										src={news.image}
+										alt={news.category}
+									/>
+								)}
+							</div>
 						</div>
 					</div>
 				))}
@@ -62,14 +66,18 @@ const Widget = () => {
 				{whoToFollow.map((item, index) => (
 					<div key={index} className={styles.item}>
 						<div className={styles.followAvatarContainer}>
-							<Image
-								width={600}
-								height={100}
-								quality={100}
-								src={item.avatar}
-								alt={item.name}
-								className={styles.followAvatar}
-							/>
+							<div className={styles.followAvatar}>
+								{item.avatar && (
+									<Image
+										sizes="100vw"
+										width={0}
+										height={0}
+										style={{ width: "100%", height: "auto" }}
+										src={item.avatar}
+										alt={item.name}
+									/>
+								)}
+							</div>
 						</div>
 						<div>
 							<div className={styles.name}>{item.name}</div>

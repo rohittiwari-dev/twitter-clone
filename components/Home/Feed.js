@@ -66,7 +66,7 @@ const Feed = ({ user }) => {
 						className="w-full flex justify-center  transition-all   items-center h-[3rem] cursor-pointer hover:bg-[#191919]"
 					>
 						<span id={"againstyou"} className={styles.headerButton}>
-							Against You
+							Following You
 						</span>
 					</div>
 				</div>

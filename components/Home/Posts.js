@@ -20,14 +20,14 @@ import Image from "next/image";
 
 const styles = {
 	wrapper: `flex p-3 border-b border-[#38444d]/60`,
-	profileImage: `rounded-full h-[40px] w-[40px] object-cover`,
+	profileImage: `rounded-full h-[40px] w-[40px] overflow-hidden relative`,
 	postMain: `flex-1 px-4`,
-	headerDetails: `flex items-center`,
+	headerDetails: `flex items-center text-sm`,
 	name: `font-bold mr-1`,
 	verified: `text-[0.8rem]`,
 	handleAndTimeAgo: `text-[#8899a6] ml-1`,
 	tweet: `my-2`,
-	tweetmedia: "w-[650] select-none pointer-events-none h-[420] rounded-2xl cover object-fit image",
+	tweetmedia: "w-full select-none pointer-events-none h-auto overflow-hidden rounded-2xl relative",
 	image: `rounded-3xl`,
 	footer: `flex justify-between  mt-2 text-[#8899a6]`,
 	footerIcon: `rounded-full p-[0.3rem] text-[1rem] flex cursor-pointer relative items-center gap-0`,
@@ -84,17 +84,17 @@ const Posts = ({
 
 	return (
 		<div className={styles.wrapper}>
-			<div>
-				<Image
-					width={600}
-					height={100}
-					quality={100}
-					src={avatar}
-					alt={username}
-					className={
-						isProfileImageNFT ? `${styles.profileImage} smallHex` : styles.profileImage
-					}
-				/>
+			<div
+				className={isProfileImageNFT ? `${styles.profileImage} smallHex` : styles.profileImage}
+			>
+				{avatar && (
+					<Image
+						sizes="full"
+						fill
+						src={`${!avatar ? "" : avatar}`}
+						alt={"Tweeter Profile Image"}
+					/>
+				)}
 			</div>
 
 			<div className={styles.postMain}>
@@ -116,16 +116,19 @@ const Posts = ({
 						</span>
 					</span>
 					<div className={styles.tweet}>{text}</div>
+
 					{tweetmedia && (
-						<Image
-							width={600}
-							height={100}
-							priority={true}
-							quality={100}
-							src={tweetmedia}
-							alt=""
-							className={`${styles.tweetmedia}`}
-						/>
+						<div className={`${styles.tweetmedia}`}>
+							<Image
+								sizes="100vw"
+								style={{ width: "100%", height: "auto" }}
+								height={0}
+								width={0}
+								priority
+								src={tweetmedia}
+								alt="Tweet Media"
+							/>
+						</div>
 					)}
 				</div>
 				<div className={styles.footer}>

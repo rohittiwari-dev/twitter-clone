@@ -25,7 +25,7 @@ const styles = {
 	navContainer: `flex-1 flex flex-col items-center lg:block pr-5 lg:pr-0`,
 	profileButton: `flex w-fit mr-5 lg:mr-0 gap-3  p-2 items-center mb-3 cursor-pointer hover:bg-[#191919] rounded-full`,
 	profileLeft: `flex items-center justify-center`,
-	profileImage: `h-10 w-10 rounded-full`,
+	profileImage: `h-10 w-10 rounded-full relative overflow-hidden `,
 	profileRight: `flex-1 flex justify-between hidden gap-5 lg:flex`,
 	details: `flex-1`,
 	name: `text-sm font-semibold pb-0 flex gap-1 items-center`,
@@ -94,8 +94,8 @@ const Sidebar = ({ activeLink = "Home", user }) => {
 				<SidebarOption text={"More"} Icon={CgMoreO} setSelected={setSelected} />
 
 				<div className={styles.tweetButton}>
-					<span className="inline lg:hidden">
-						<Image src={TbSend} width={30} height={30} alt="" loading="eager" />
+					<span className="inline lg:hidden w-8 overflow-hidden h-8 relative">
+						<Image src={TbSend} fill sizes="full" alt="twitter" />
 					</span>
 					<span className="hidden lg:inline">Tweet</span>
 				</div>
@@ -107,14 +107,16 @@ const Sidebar = ({ activeLink = "Home", user }) => {
 				}}
 			>
 				<div className={styles.profileLeft}>
-					<Image
-						width={600}
-						height={100}
-						quality={100}
-						className={styles.profileImage}
-						src={user?.avatar}
-						alt={""}
-					/>
+					<div className={styles.profileImage}>
+						{user.avatar && (
+							<Image
+								fill
+								sizes="full"
+								src={`${!user.avatar ? "" : user.avatar}`}
+								alt={"Profile Image"}
+							/>
+						)}
+					</div>
 				</div>
 				<div className={styles.profileRight}>
 					<div className={styles.details}>

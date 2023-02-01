@@ -9,7 +9,7 @@ import { fetchUsers } from "@/redux/reduxActions";
 import { STATES } from "@/utils/enums";
 import { ImSpinner9 } from "react-icons/im";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import dataBase from "@/utils/firebase";
+import dataBase from "@/firebase";
 
 const styles = {
 	wrapper: `lg:max-w-7xl flex items-center justify-center m-auto h-screen bg-[#00000] text-white overflow-hidden`,

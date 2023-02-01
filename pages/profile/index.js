@@ -3,7 +3,7 @@ import ProfilePage from "@/components/Profile/ProfilePage";
 import Sidebar from "@/components/sidebar/Sidebar";
 import { fetchUsers } from "@/redux/reduxActions";
 import { STATES } from "@/utils/enums";
-import dataBase from "@/utils/firebase";
+import dataBase from "@/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { getSession, useSession } from "next-auth/react";
 import Head from "next/head";

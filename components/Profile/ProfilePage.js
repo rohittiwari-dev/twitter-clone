@@ -4,7 +4,7 @@ import Cover from "./Cover";
 import { useRouter } from "next/router";
 import Posts from "../Home/Posts";
 import { collection, onSnapshot } from "firebase/firestore";
-import dataBase from "@/utils/firebase";
+import dataBase from "@/firebase";
 import { ImSpinner9 } from "react-icons/im";
 
 const styles = {

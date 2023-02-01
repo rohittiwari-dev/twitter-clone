@@ -4,7 +4,7 @@ import { format } from "timeago.js";
 import { FaRegComment, FaRetweet } from "react-icons/fa";
 import { AiOutlineHeart } from "react-icons/ai";
 import { TbBrandGoogleAnalytics } from "react-icons/tb";
-import dataBase from "@/utils/firebase";
+import dataBase from "@/firebase";
 import {
 	arrayRemove,
 	arrayUnion,

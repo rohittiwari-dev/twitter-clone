@@ -1,4 +1,4 @@
-import dataBase from "@/utils/firebase";
+import dataBase from "@/firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 

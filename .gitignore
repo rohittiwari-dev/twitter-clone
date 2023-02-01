@@ -14,7 +14,7 @@
 
 # production
 /build
-utils/firebase.js
+
 
 # misc
 .DS_Store
@@ -28,6 +28,7 @@ yarn-error.log*
 
 # local env files
 .env*.local
+firebase.js
 
 # vercel
 .vercel

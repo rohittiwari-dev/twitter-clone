@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { BsStars } from "react-icons/bs";
 import TweetBox from "@/components/Home/TweetBox";
 import Posts from "@/components/Home/Posts";
-import dataBase from "@/utils/firebase";
+import dataBase from "@/firebase";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { ImSpinner9 } from "react-icons/im";
 

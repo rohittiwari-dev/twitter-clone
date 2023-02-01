@@ -6,7 +6,7 @@ import { MdScheduleSend } from "react-icons/md";
 import { SlLocationPin } from "react-icons/sl";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { arrayUnion, doc, setDoc, updateDoc } from "firebase/firestore";
-import dataBase, { storage } from "@/utils/firebase";
+import dataBase, { storage } from "@/firebase";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { v4 } from "uuid";
 import { useDispatch } from "react-redux";

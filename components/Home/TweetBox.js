@@ -100,7 +100,7 @@ const TweetBox = ({ user }) => {
 					maxLength="200"
 				></textarea>
 				{selectedImage && (
-					<div className="relative w-full h-[370px] mr-4  rounded-2xl overflow-hidden ">
+					<div className="relative w-full h-full mr-4  rounded-2xl overflow-hidden ">
 						<Image
 							sizes="100vw"
 							width={0}

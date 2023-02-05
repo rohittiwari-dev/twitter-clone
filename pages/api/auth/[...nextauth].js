@@ -7,17 +7,10 @@ export const authOptions = {
 		GoogleProvider({
 			clientId: process.env.NEXTAUTH_GOOGLE_CLIENTID,
 			clientSecret: process.env.NEXTAUTH_GOOGLE_CLIENTSECRET,
-			authorization: {
-				params: {
-					prompt: "consent",
-					access_type: "offline",
-					response_type: "code",
-				},
-			},
 		}),
 		// ...add more providers here
 	],
-	secret: process.env.NEXTAUTH_SECRET.toString(),
+	secret: process.env.NEXTAUTH_SECRET,
 };
 
 export default NextAuth(authOptions);

@@ -3,7 +3,7 @@ import Sidebar from "@/components/sidebar/Sidebar";
 import Feed from "@/components/Home/Feed";
 import Widget from "@/components/Home/Widget";
 import { useSession, getSession } from "next-auth/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "@/redux/reduxActions";
 import { STATES } from "@/utils/enums";
@@ -20,6 +20,12 @@ export default function Home() {
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.logedinUser);
 	const { data: session } = useSession();
+	const [loading, setLoading] = useState(true);
+	useEffect(() => {
+		setTimeout(() => {
+			setLoading(false);
+		}, 700);
+	}, []);
 	useEffect(() => {
 		if (user.state === STATES.LOADING) {
 			const fetchUser = async () => await dispatch(fetchUsers(session.user.email));
@@ -30,7 +36,7 @@ export default function Home() {
 	return (
 		<>
 			<Head>
-				<title>Home / Twitter</title>
+				<title>Home / Twitter (Clone)</title>
 				<meta charSet="UTF-8" />
 				<link rel="shortcut icon" href="https://abs.twimg.com/favicons/twitter.2.ico" />
 				<meta
@@ -39,18 +45,16 @@ export default function Home() {
 				/>
 				<meta httpEquiv="X-UA-Compatible" content="ie=edge" />
 			</Head>
-
 			<main className={styles.wrapper}>
-				{user.state !== STATES.SUCCESS ? (
-					<ImSpinner9
-						color={"#1DA1F2"}
-						size="30"
-						className="text-center w-full mt-20 animate-spin"
-					/>
+				{loading ? (
+					<ImSpinner9 color={"#1DA1F2"} size="30" className="text-center animate-spin" />
 				) : (
 					<div className={styles.content}>
 						<Sidebar user={user.data} activeLink={"Home"} />
-						<div className=" will-change-scroll grid grid-cols-9 col-span-9 sm:col-span-7 h-screen overflow-auto scroll-smooth scrollbar-hide">
+						<div
+							id="stopScroll"
+							className=" will-change-scroll grid grid-cols-9 col-span-9 sm:col-span-7 h-screen overflow-auto scroll-smooth scrollbar-hide"
+						>
 							<Feed user={user.data} />
 							<Widget />
 						</div>
@@ -81,6 +85,7 @@ export async function getServerSideProps({ req }) {
 			customId: `@${session.user.email.split("@")[0]}`,
 			followers: [],
 			followings: [],
+			tweetsReplies: [],
 			nftVerified: false,
 			coverImage: "",
 			timestamp: new Date(),

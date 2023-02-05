@@ -17,9 +17,10 @@ import { CgMoreO } from "react-icons/cg";
 import TbSend from "@/assets/Twitter-Send-Svg.png";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
+import { useRouter } from "next/router";
 
 const styles = {
-	wrapper: `items-end lg:items-start flex-col h-screen col-span-2 ml-2 hidden sm:flex`,
+	wrapper: `items-end lg:items-start flex-col h-screen col-span-2 ml-2  sm:flex`,
 	twitterIconContainer: `text-3xl mr-7 lg:mx-4 my-3`,
 	tweetButton: `text-[1.1rem] w-fit bg-[#1d9bf0] hover:bg-[#1b8cd8] flex items-center justify-center font-bold rounded-full lg:rounded-3xl p-3 lg:min-w-full mt-[10px] cursor-pointer`,
 	navContainer: `flex-1 flex flex-col items-center lg:block pr-5 lg:pr-0`,
@@ -33,11 +34,11 @@ const styles = {
 	moreContainer: `flex items-center mr-2 hidden lg:flex`,
 };
 
-const Sidebar = ({ activeLink = "Home", user }) => {
+const Sidebar = ({ activeLink, user, mobile }) => {
 	const [selected, setSelected] = useState(activeLink);
-
+	const router = useRouter();
 	return (
-		<div className={styles.wrapper}>
+		<div className={!mobile ? `${styles.wrapper} hidden` : `${styles.wrapper} flex px-5`}>
 			<div className={styles.twitterIconContainer}>
 				<VscTwitter />
 			</div>
@@ -89,11 +90,16 @@ const Sidebar = ({ activeLink = "Home", user }) => {
 					Icon={selected === "Profile" ? BsPersonFill : BsPerson}
 					isActive={Boolean(selected === "Profile")}
 					setSelected={setSelected}
-					redirect={"/profile"}
+					redirect={"/" + user?.customId?.replace("@", "")}
 				/>
 				<SidebarOption text={"More"} Icon={CgMoreO} setSelected={setSelected} />
 
-				<div className={styles.tweetButton}>
+				<div
+					className={styles.tweetButton}
+					onClick={() => {
+						router.push("/");
+					}}
+				>
 					<span className="inline lg:hidden w-8 overflow-hidden h-8 relative">
 						<Image src={TbSend} fill sizes="full" alt="twitter" />
 					</span>
@@ -107,7 +113,11 @@ const Sidebar = ({ activeLink = "Home", user }) => {
 				}}
 			>
 				<div className={styles.profileLeft}>
-					<div className={styles.profileImage}>
+					<div
+						className={
+							user.nftVerified ? styles.profileImage + "smallHex" : styles.profileImage
+						}
+					>
 						{user.avatar && (
 							<Image
 								fill

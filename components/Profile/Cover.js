@@ -1,31 +1,117 @@
+import dataBase, { storage } from "@/firebase";
+import { fetchUsers } from "@/redux/reduxActions";
+import { doc, updateDoc } from "firebase/firestore";
+import {
+	deleteObject,
+	getDownloadURL,
+	getMetadata,
+	ref,
+	uploadBytes,
+	uploadString,
+} from "firebase/storage";
 import Image from "next/image";
 import React, { useState } from "react";
-import { BiCalendarEvent } from "react-icons/bi";
+import { BiCalendarEvent, BiCamera } from "react-icons/bi";
 import { BsFillPatchCheckFill } from "react-icons/bs";
+import { useDispatch } from "react-redux";
+import { v4 } from "uuid";
 
 const style = {
 	activeTabLink: `font-bold text-[0.95rem] flex justify-center items-center text-medium w-full relative before:absolute before:top-[1.8rem] before:left-[25%] before:content-[''] before:w-[50%] before:h-[2px] before:bg-[#1d9bf0]`,
 	tabLink: `font-light text-medium`,
 };
 
-const Cover = ({ user }) => {
+const Cover = ({ user, userType }) => {
 	const [active, setActive] = useState("tweets");
+	const dispatch = useDispatch();
+	const updateImage = async (e) => {
+		e.preventDefault();
+		const file = e.target.files[0];
+		if (file) {
+			if (e.target.name === "coverImage" && user.coverImage) {
+				const oldimgRef = await getMetadata(ref(storage, user.coverImage));
+				if (oldimgRef) await deleteObject(ref(storage, oldimgRef.fullPath));
+			} else if (
+				e.target.name === "profileImage" &&
+				user?.avatar?.indexOf("lh3.googleusercontent.com") === -1 &&
+				user.avatar
+			) {
+				const oldimgRef = await getMetadata(ref(storage, user.avatar));
+				if (oldimgRef) await deleteObject(ref(storage, oldimgRef.fullPath));
+			}
+			const newImageRef = ref(
+				storage,
+				e.target.name === "coverImage" ? "coverImage/" + v4() : "profileImage/" + v4()
+			);
+			const image = await uploadBytes(newImageRef, file);
+			if (image) {
+				const ImageUrl = await getDownloadURL(newImageRef);
+				if (ImageUrl)
+					if (e.target.name === "coverImage")
+						await updateDoc(doc(dataBase, "users", user.email), {
+							coverImage: ImageUrl,
+						});
+					else
+						await updateDoc(doc(dataBase, "users", user.email), {
+							avatar: ImageUrl,
+						});
+			}
+		}
+		await dispatch(fetchUsers(user.email));
+	};
 	return (
 		<div>
 			<div
 				style={{ backgroundImage: `url(${!user.coverImage ? "" : user.coverImage})` }}
-				className="w-full object-cover bg-cover bg-no-repeat flex relative bg-slate-800 h-48"
+				className="w-full object-cover select-none bg-cover bg-no-repeat flex relative bg-slate-800 h-48"
 			>
-				<div className="w-36 h-36 border-4 border-black ring-1 rounded-full absolute top-[50%] overflow-hidden left-3">
-					<div className="relative w-full h-full">
-						{user.avatar && (
-							<Image priority fill sizes="fill" src={user.avatar} alt="Profile Image" />
-						)}
+				{userType && (
+					<div className="w-9 h-9  select-none shadow-lg bottom-2 bg-black/30  transition-all duration-200 hover:bg-black/70 flex items-center justify-center right-2 rounded-full absolute overflow-hidden">
+						<label htmlFor="cover_img">
+							<div className=" w-full h-full">
+								<BiCamera size={25} />
+							</div>
+							<input
+								type={"file"}
+								onChange={updateImage}
+								accept="image/*"
+								name="coverImage"
+								id="cover_img"
+								hidden
+							/>
+						</label>
 					</div>
+				)}
+				<div
+					className={
+						user.nftVerified
+							? "w-36 h-36 select-none  rounded-full absolute top-[50%] overflow-hidden left-3 smallHex"
+							: "w-36 h-36 select-none  rounded-full  absolute top-[50%] overflow-hidden left-3"
+					}
+				>
+					<label htmlFor="prof_img">
+						<div className="relative w-36 h-36 bg-slate-800 hover:border-2 hover:border-slate-500/30">
+							{user.avatar && (
+								<Image sizes="full" fill priority src={user.avatar} alt="Profile Image" />
+							)}
+						</div>
+						{userType && (
+							<input
+								type={"file"}
+								onChange={updateImage}
+								accept="image/*"
+								name="profileImage"
+								id="prof_img"
+								hidden
+							/>
+						)}
+					</label>
 				</div>
-				<span className="right-4 border rounded-3xl py-1 px-3 border-[#38444d]/60 hover:bg-[#191919]/60 transition-all  bottom-[-3rem] absolute">
-					Edit Profile
-				</span>
+				{userType && (
+					<span className="right-4 border rounded-3xl py-1 px-3 border-[#38444d]/60 hover:bg-[#191919]/60 transition-all  bottom-[-3rem] absolute">
+						Edit Profile
+					</span>
+				)}
 			</div>
 			<div className="w-full mt-10 p-7 text-lg font-semibold">
 				<h2 className="flex gap-1 items-center">

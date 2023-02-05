@@ -3,7 +3,7 @@ import { IoArrowBack } from "react-icons/io5";
 import Cover from "./Cover";
 import { useRouter } from "next/router";
 import Posts from "../Home/Posts";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot, orderBy, query, where } from "firebase/firestore";
 import dataBase from "@/firebase";
 import { ImSpinner9 } from "react-icons/im";
 
@@ -13,7 +13,7 @@ const styles = {
 	icon: `font-bold text-[1.2rem] rounded-full w-9 h-9 hover:bg-[#191919] flex justify-center items-center`,
 };
 
-const ProfilePage = ({ user }) => {
+const ProfilePage = ({ user, userType }) => {
 	const router = useRouter();
 
 	const [tweetPost, setTweetPost] = useState([]);
@@ -23,8 +23,13 @@ const ProfilePage = ({ user }) => {
 	useEffect(() => {
 		const getPost = async () => {
 			setLoading(true);
-			await onSnapshot(collection(dataBase, "posts"), async (snapshot) =>
-				setTweetPost(await snapshot.docs.map((doc) => doc.data()))
+			await onSnapshot(
+				query(
+					collection(dataBase, "posts"),
+					where("postOwner", "==", user.email),
+					orderBy("timestamp", "desc")
+				),
+				async (snapshot) => setTweetPost(await snapshot.docs.map((doc) => doc.data()))
 			);
 			await onSnapshot(collection(dataBase, "users"), async (snapshot) =>
 				setPostOwners(await snapshot.docs.map((doc) => doc.data()))
@@ -42,7 +47,7 @@ const ProfilePage = ({ user }) => {
 					className={styles.icon}
 					onClick={(e) => {
 						e.preventDefault();
-						router.push("/");
+						router.back();
 					}}
 				>
 					<IoArrowBack />
@@ -55,7 +60,7 @@ const ProfilePage = ({ user }) => {
 				</div>
 			</div>
 			{/* Cover Section */}
-			<Cover user={user} />
+			<Cover userType={userType} user={user} />
 			{!loading ? (
 				tweetPost.map((tweet, index) => {
 					const postOwner = postOwners.find((owner) => owner.email === tweet.postOwner);
@@ -66,6 +71,7 @@ const ProfilePage = ({ user }) => {
 							displayName={postOwner?.firstName}
 							username={postOwner?.customId}
 							text={tweet?.tweetMessage}
+							userId={postOwner.customId}
 							avatar={postOwner?.avatar}
 							timestamp={tweet?.timestamp}
 							tweetmedia={tweet?.tweetImage}

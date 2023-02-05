@@ -12,24 +12,27 @@ import { v4 } from "uuid";
 import { useDispatch } from "react-redux";
 import { fetchUsers } from "@/redux/reduxActions";
 import Image from "next/image";
+import EmojiPicker from "emoji-picker-react";
 
 const styles = {
-	wrapper: `flex w-screen sm:w-full flex-row border-b pt-4 px-4 h-auto border-[#38444d]/60`,
+	wrapper: `flex w-screen sm:w-full flex-row pt-4 px-4 h-auto border-[#38444d]/60`,
 	tweetBoxLeft: `mr-4 h-fit`,
 	tweetBoxRight: `flex-1 h-max flex flex-col gap-3 justify-center pt-3`,
 	profileImage: `h-10 w-10 rounded-full overflow-hidden relative`,
 	inputField: `w-full resize-none outline-none bg-transparent text-medium h-auto min-h-[3rem] scrollbar-hide`,
 	formLowerContainer: `flex w-full py-3`,
 	iconsContainer: `text-[#1d9bf0] flex flex-1 items-center flex-wrap sm:flex-nowrap`,
-	icon: `mr-1 font-bold text-[1.2rem] rounded-full w-9 h-9 transition-all hover:bg-[#191919] flex justify-center items-center`,
+	icon: `mr-1 font-bold text-[1.2rem] rounded-full relative w-9 h-9 transition-all hover:bg-[#191919] flex justify-center items-center`,
 	submitGeneral: `px-6 py-2 rounded-3xl font-bold`,
 	inactiveSubmit: `bg-[#196195] transition-all pointer-event-none disabled text-[#95999r] h-fit sm:h-full rounded-3xl px-4 py-[0.45rem]`,
 	activeSubmit: `bg-[#1d9bf0] transition-all pointer-event-auto enabled text-white rounded-3xl h-fit sm:h-full font-bold px-4 py-[0.45rem]`,
 };
 
-const TweetBox = ({ user }) => {
+const TweetBox = ({ user, borderOf, comments, tweetId, closeModel, commentCount }) => {
 	const dispatch = useDispatch();
 	const [selectedImage, setSelectedImage] = useState(null);
+	const [showEmoji, setShowEmoji] = useState(false);
+	const [commentImage, setCommentImage] = useState(null);
 	const [tweeting, setTweeting] = useState(false);
 	const [tweet, setTweet] = useState({
 		tweetId: v4(),
@@ -41,6 +44,60 @@ const TweetBox = ({ user }) => {
 		timestamp: new Date(),
 		tweetMessage: "",
 	});
+	const [comment, setComment] = useState({
+		commentId: v4(),
+		tweetId: tweetId,
+		comments: [],
+		commentsCount: 0,
+		likes: [],
+		likesCount: 0,
+		userId: user.email,
+		timestamp: new Date(),
+		commentMessage: "",
+	});
+	/* Function for Comments */
+	const commentNow = async () => {
+		if (tweeting || !comments) return;
+		if (comment.commentMessage !== "" || commentImage) {
+			setTweeting(true);
+			const imageRef = ref(storage, "commentMedia/image/" + comment.commentId);
+			if (commentImage) {
+				const Image = await uploadString(imageRef, commentImage, "data_url");
+				await setDoc(doc(dataBase, "comments", comment.commentId), tweet);
+				if (Image) {
+					const ImageUrl = await getDownloadURL(imageRef);
+					if (ImageUrl) {
+						await updateDoc(doc(dataBase, "comments", comment.commentId), {
+							commentImage: ImageUrl,
+						});
+						await updateDoc(doc(dataBase, "posts", tweetId), {
+							commentsCount: commentCount + 1,
+							comments: arrayUnion(comment.commentId),
+						});
+						await updateDoc(doc(dataBase, "users", user.email), {
+							tweetsReplies: arrayUnion(comment.commentId),
+						});
+					}
+				}
+			} else {
+				await setDoc(doc(dataBase, "comments", comment.commentId), comment);
+				await updateDoc(doc(dataBase, "posts", tweetId), {
+					commentsCount: commentCount + 1,
+					comments: arrayUnion(comment.commentId),
+				});
+				await updateDoc(doc(dataBase, "users", user.email), {
+					tweetsReplies: arrayUnion(comment.commentId),
+				});
+			}
+			setCommentImage(null);
+			await dispatch(fetchUsers(user.email));
+			setComment({ ...comment, commentMessage: "" });
+			setTweeting(false);
+			if (typeof closeModel === "function") closeModel();
+		}
+		document.activeElement.blur();
+	};
+	/* fUNCTION FOR tWEETS */
 	const tweetNow = async () => {
 		if (tweeting) return;
 		if (tweet.tweetMessage !== "" || selectedImage) {
@@ -73,9 +130,15 @@ const TweetBox = ({ user }) => {
 		}
 	};
 	return (
-		<div className={styles.wrapper}>
+		<div className={borderOf ? `${styles.wrapper}` : `${styles.wrapper} border-b`}>
 			<div className={styles.tweetBoxLeft}>
-				<div className={styles.profileImage}>
+				<div
+					className={
+						user.nftVerified
+							? `${styles.profileImage} smallHex hover:border hover:border-slate-500/50`
+							: `${styles.profileImage} hover:border-2 hover:border-cyan-500/50`
+					}
+				>
 					{user.avatar && (
 						<Image
 							fill
@@ -91,12 +154,15 @@ const TweetBox = ({ user }) => {
 					type="text"
 					placeholder="What's happening?"
 					name="message"
+					autoFocus
 					onChange={(e) => {
-						setTweet({ ...tweet, tweetMessage: e.target.value, tweetId: v4() });
+						!comments
+							? setTweet({ ...tweet, tweetMessage: e.target.value, tweetId: v4() })
+							: setComment({ ...comment, commentMessage: e.target.value, commentId: v4() });
 						e.currentTarget.style.height = e.currentTarget.scrollHeight + "px";
 					}}
 					className={styles.inputField}
-					value={tweet.tweetMessage}
+					value={!comments ? tweet.tweetMessage : comment.commentMessage}
 					maxLength="200"
 				></textarea>
 				{selectedImage && (
@@ -112,7 +178,7 @@ const TweetBox = ({ user }) => {
 						/>
 						<span
 							onClick={() => {
-								setSelectedImage(null);
+								!comments ? setSelectedImage(null) : setCommentImage(null);
 							}}
 							className={
 								"absolute w-8 h-8 transition-all hover:bg-[#191919]/60 top-1 left-1 rounded-full"
@@ -120,6 +186,31 @@ const TweetBox = ({ user }) => {
 						>
 							<AiOutlineCloseCircle className="text-slate-900 w-8 h-8 hover:text-white/60" />
 						</span>
+					</div>
+				)}
+				{commentImage && (
+					<div className="overflow-y-auto max-h-[300px] rounded-2xl scrollbar-hide">
+						<div className="relative w-full h-full mr-4  rounded-2xl overflow-hidden ">
+							<Image
+								sizes="100vw"
+								width={0}
+								height={0}
+								style={{ width: "100%", height: "auto" }}
+								priority
+								src={commentImage}
+								alt="Tweeted Image"
+							/>
+							<span
+								onClick={() => {
+									setCommentImage(null);
+								}}
+								className={
+									"absolute w-8 h-8 transition-all hover:bg-[#191919]/60 top-1 left-1 rounded-full"
+								}
+							>
+								<AiOutlineCloseCircle className="text-slate-900 w-8 h-8 hover:text-white/60" />
+							</span>
+						</div>
 					</div>
 				)}
 				<div className={styles.formLowerContainer}>
@@ -134,7 +225,9 @@ const TweetBox = ({ user }) => {
 										const file = e.target.files[0];
 										if (file) reader.readAsDataURL(file);
 										reader.onloadend = (read) => {
-											setSelectedImage(read.target.result);
+											!comments
+												? setSelectedImage(read.target.result)
+												: setCommentImage(read.target.result);
 										};
 										e.target.type = "text";
 										e.target.value = "";
@@ -153,7 +246,30 @@ const TweetBox = ({ user }) => {
 								<CgOptions />
 							</span>
 							<span className={styles.icon}>
-								<BsEmojiSmile />
+								<BsEmojiSmile onClick={() => setShowEmoji(!showEmoji)} />
+								{showEmoji && (
+									<div className="absolute top-10 z-40">
+										<EmojiPicker
+											theme="dark"
+											height={"350px"}
+											autoFocusSearch
+											onEmojiClick={(emojiObj) => {
+												!comments
+													? setTweet({
+															...tweet,
+															tweetMessage: tweet.tweetMessage + emojiObj.emoji,
+													  })
+													: setComment({
+															...comment,
+															commentMessage:
+																comment.commentMessage + emojiObj.emoji,
+													  });
+
+												setShowEmoji(false);
+											}}
+										/>
+									</div>
+								)}
 							</span>
 							<span className={styles.icon}>
 								<MdScheduleSend />
@@ -165,12 +281,22 @@ const TweetBox = ({ user }) => {
 					)}
 					<button
 						className={
-							(tweet.tweetMessage !== "" && !tweeting) ||
-							(selectedImage !== null && !tweeting)
+							(!comments
+								? tweet.tweetMessage !== "" && !tweeting
+								: comment.commentMessage !== "" && !tweeting) ||
+							(!comments
+								? selectedImage !== null && !tweeting
+								: commentImage !== null && !tweeting)
 								? styles.activeSubmit
 								: styles.inactiveSubmit
 						}
-						onClick={() => tweetNow()}
+						onClick={
+							!comments
+								? () => tweetNow()
+								: () => {
+										commentNow();
+								  }
+						}
 					>
 						{!tweeting ? (
 							"Tweet"

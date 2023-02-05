@@ -35,11 +35,7 @@ const Login = () => {
 			</Head>
 			<main className=" h-screen w-screen flex justify-center items-center">
 				{loading ? (
-					<ImSpinner9
-						color={"#1DA1F2"}
-						size="30"
-						className="text-center w-full mt-20 animate-spin"
-					/>
+					<ImSpinner9 color={"#1DA1F2"} size="30" className="text-center animate-spin" />
 				) : (
 					<div
 						className="w-40 h-10 font-bold bg-white text-cyan-900 text-center flex justify-center items-center cursor-pointer"

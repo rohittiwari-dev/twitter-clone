@@ -5,7 +5,7 @@ import Image from "next/image";
 
 const styles = {
 	wrapper: `p-4 mr-5 h-fit col-span-4 hidden lg:inline`,
-	SearchBarContainer: `bg-[#000000] w-full flex justify-center items-center sticky top-0 py-3`,
+	SearchBarContainer: `bg-[#000000] w-full z-10 flex justify-center items-center sticky top-0 py-3`,
 	searchBar: `flex items-center w-full bg-[#243340] p-2 rounded-3xl `,
 	searchIcon: `text-[#8899a6] mr-2`,
 	inputBox: `bg-transparent outline-none`,
@@ -17,9 +17,9 @@ const styles = {
 	newsItemCategory: `text-[#8899a6] text-xs font-semibold`,
 	newsItemTitle: `text-sm font-bold`,
 	newsItemRight: `w-1/5 ml-3`,
-	newsItemImage: `rounded-xl h-14 w-14 overflow-hidden relative `,
+	newsItemImage: `rounded-xl h-14 w-14 overflow-hidden relative -z-0`,
 	followAvatarContainer: `w-1/6`,
-	followAvatar: `rounded-full h-[60px] w-[60px] relative overflow-hidden`,
+	followAvatar: `rounded-full h-[60px] w-[60px] relative z-0 overflow-hidden`,
 	profileDetails: `flex-1`,
 	name: `font-bold`,
 	handle: `text-[#8899a6]`,
